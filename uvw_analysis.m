@@ -1,7 +1,10 @@
- function [Est,Dt,angp,thetar,thetas,radius,T3,tau,u,v,w] = uvw_analysis(x_w, Fsn, nbins)
+ function [Est,Dt,angp,thetar,thetas,radius,T3,tau,u,v,w] = uvw_analysis(x_data, Fs, nbins)
+% x-data :  The window of the data of observation
+% Fs     :  Sampling frequency
+% nbins  :  Number of bins for estimating the kernel density
 
 Mlag=floor(length(x_w)/2);
-[amis, ~, ~] = ami(x_w,20,Mlag);estLag = find(diff(amis)>0,1);
+[amis, ~, ~] = ami(x_w,20,Mlag);estLag = find(diff(amis)>0,1);% compute the time lag
 [pksh,lcsh] = findpeaks(amis);short = mean(diff(lcsh))/(Fsn);
 if ~(isnan(short))
     [~,lclg] = findpeaks(amis,'MinPeakHeight',max(amis(estLag:end))/4,'MinPeakDistance',ceil(short)*(Fsn));
@@ -19,7 +22,7 @@ tau=floor(T3/3);
 [u,v,w]=uvw_rec(x_w,tau);
 [v_rot, w_rot] = rotate_plane(v, w,2);
 [v_rot4, w_rot4] = rotate_plane(v, w,4);
-% maximum ksdensity and std(Est)
+% maximum ksdensity 
 [Est, ~] = densimage_calc(v, w,nbins);
 [Estrot, ~] = densimage_calc(v_rot', w_rot',nbins);
 [Estrot4, ~] = densimage_calc(v_rot4', w_rot4',nbins);
@@ -35,6 +38,7 @@ angp=mean(thet);thetas=abs(mean(diff(thet)));
 
 end
 
+% rotate u, v and w
 function [v_rotated, w_rotated] = rotate_plane(v, w, th)
 % rotation 2*pi/3 or 4*pi/3
 p = [v w]';
@@ -67,6 +71,7 @@ w_rotated = vo(2,:);
 
 end
 
+% Kernel density estimation
 function [Est, XY] = densimage_calc(v, w,nbins)
 % nbins=47;
 % fact=factor(length(v));mgrid1=fact(end);mgrid2=(length(v))/fact(end);
@@ -80,6 +85,7 @@ xi = [x1 x2];
 % hopt=1;
 [Esto,XYo,bw] = ksdensity([v w],xi);%hopt=bw/2.8;
 
+% optimase the kernel bandwidth
 htry=(0.3:0.05:1.5).*bw(1); htry2=(0.3:0.05:1.5).*bw(2);
 for i=1:length(htry)
     moh(i)=lscvscore(v,htry(i));
@@ -116,6 +122,7 @@ end
 % find the angle of two sides of the triangle
 function [theta,thetar,r]=angle_calc(v,w,x_w,la3)
 
+% estimate angle of rotation and angular spread
 % [hv,pv]=findpeaks(v,'MinPeakHeight',max(v)/8,'MinPeakDistance',2*T3/3);
 [hvn,~]=findpeaks(-v,'MinPeakDistance',2*la3);% amplitude of negative v
 [hw,~]=findpeaks(w,'MinPeakDistance',2*la3);% amplitude of positive w
@@ -139,8 +146,8 @@ r=max((sqrt(3)*hamp_n)/(2*sqrt(2))); % radius of the circle centred at (0,0) enc
 theta=asec((rwn+rw)/rvn);%measuring the angle of triangles
 end
 
+% compute u, v and w
 function [u,v,w]=uvw_rec(x_w,lag3)
-
 em=3;
 % lag3=floor(T3/3);
 N1=length(x_w);M1=N1-(em-1)*lag3(1,1);Y3=zeros(M1,em);
