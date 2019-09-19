@@ -9,6 +9,7 @@ N=reshape(Est',nbins,nbins);
 pts = linspace(min(v), max(v), nbins);
 
 % Create Gaussian filter matrix:
+
 [xG, yG] = meshgrid(-(nbins-0.5)/2:(nbins-0.5)/2);
 sigma = 2.5;
 g = exp(-xG.^2./(2.*sigma.^2)-yG.^2./(2.*sigma.^2));
