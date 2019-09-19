@@ -1,24 +1,24 @@
- function [Est,Dt,angp,thetar,thetas,radius,T3,tau,u,v,w] = uvw_analysis(x_data, Fs, nbins)
-% x-data :  The window of the data of observation
+ function [Est,Dt,angp,thetar,thetas,radius,T,tau,u,v,w] = uvw_analysis(x_w, Fs, nbins)
+% x_w    :  The window of the data of observation
 % Fs     :  Sampling frequency
 % nbins  :  Number of bins for estimating the kernel density
 
 Mlag=floor(length(x_w)/2);
 [amis, ~, ~] = ami(x_w,20,Mlag);estLag = find(diff(amis)>0,1);% compute the time lag
-[pksh,lcsh] = findpeaks(amis);short = mean(diff(lcsh))/(Fsn);
+[pksh,lcsh] = findpeaks(amis);short = mean(diff(lcsh))/(Fs);
 if ~(isnan(short))
-    [~,lclg] = findpeaks(amis,'MinPeakHeight',max(amis(estLag:end))/4,'MinPeakDistance',ceil(short)*(Fsn));
-    tao = find(lclg > floor(Fsn/2) & lclg < floor(Fsn*1.6),1);
+    [~,lclg] = findpeaks(amis,'MinPeakHeight',max(amis(estLag:end))/4,'MinPeakDistance',ceil(short)*(Fs));
+    tao = find(lclg > floor(Fs/2) & lclg < floor(Fs*1.6),1);
     
     if isempty(tao)
-        T3=estLag*2;
+        T=estLag*2;
     else
-        T3=lclg(tao);
+        T=lclg(tao);
     end
 else
-    T3=floor(3*estLag);
+    T=floor(3*estLag);
 end
-tau=floor(T3/3);
+tau=floor(T/3);
 [u,v,w]=uvw_rec(x_w,tau);
 [v_rot, w_rot] = rotate_plane(v, w,2);
 [v_rot4, w_rot4] = rotate_plane(v, w,4);
@@ -40,7 +40,7 @@ end
 
 % rotate u, v and w
 function [v_rotated, w_rotated] = rotate_plane(v, w, th)
-% rotation 2*pi/3 or 4*pi/3
+% rotation th = 2*pi/3 or th = 4*pi/3
 p = [v w]';
 % choose a point which will be the center of rotation
 kerSize = 6 ;
@@ -149,7 +149,6 @@ end
 % compute u, v and w
 function [u,v,w]=uvw_rec(x_w,lag3)
 em=3;
-% lag3=floor(T3/3);
 N1=length(x_w);M1=N1-(em-1)*lag3(1,1);Y3=zeros(M1,em);
 
 for i=1:em
