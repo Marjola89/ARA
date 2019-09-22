@@ -5,6 +5,9 @@ The main aim of this analysis is to perform and assess the variability of a quas
 M. Thanaj, A. J. Chipperfield, and G. F. Clough, “Attractor Reconstruction Analysis for Blood Flow Signals,” Conference: 41st International Engineering in Medicine and Biology Conference (EMBC 2019).
 
 
+
+
+
 Mutual Information was calculated from [amis corrs] = ami(xy,nBins,nLags) by Durga Lal Shrestha.
 https://uk.mathworks.com/matlabcentral/fileexchange/7936-ami-and-correlation?focused=6141194&tab=function
 
