@@ -1,5 +1,10 @@
 # ARA
 
+The main aim of this analysis is to perform and assess the variability of a quasi-periodic signal as a form of an attractor. Provides a visual representation of the multidimensional dynamics of a time series from a two-dimensional attractor with features like density and symmetry. This method is used for the analysis of microvascular blood flow signals and details can be found in the conference paper below:
+
+M. Thanaj, A. J. Chipperfield, and G. F. Clough, “Attractor Reconstruction Analysis for Blood Flow Signals,” Conference: 41st International Engineering in Medicine and Biology Conference (EMBC 2019).
+
+
 Mutual Information was calculated from [amis corrs] = ami(xy,nBins,nLags) by Durga Lal Shrestha.
 https://uk.mathworks.com/matlabcentral/fileexchange/7936-ami-and-correlation?focused=6141194&tab=function
 
