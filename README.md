@@ -15,9 +15,9 @@ Call from the main programm as:
 ```
 [Est,Dt,mean_Angles,Angle_rotation,Angular_spread,Radius,Period,time_lag,u,v,w] = uvw_analysis(x_data, Fs, nbins);
 maximum_Density=max(Dt);
-
+```
 and plot as:
-
+```
 N=reshape(Est',nbins,nbins);
 pts = linspace(min(v), max(v), nbins);
 
