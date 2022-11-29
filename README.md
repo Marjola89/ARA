@@ -12,7 +12,7 @@ Mutual Information was calculated from [amis corrs] = ami(xy,nBins,nLags) by Dur
 https://uk.mathworks.com/matlabcentral/fileexchange/7936-ami-and-correlation?focused=6141194&tab=function
 
 Call from the main programm as:
-
+```
 [Est,Dt,mean_Angles,Angle_rotation,Angular_spread,Radius,Period,time_lag,u,v,w] = uvw_analysis(x_data, Fs, nbins);
 maximum_Density=max(Dt);
 
@@ -38,4 +38,4 @@ set(gca, 'XLim', pts([1 end]), 'YLim', pts([1 end]), 'YDir', 'normal');
 axis tight;
 set(gca,'Color',[0.04 0.04 0.52]);
 
-%
+```
